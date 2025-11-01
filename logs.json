@@ -1,0 +1,13 @@
+{
+  "users": [],
+  "chats": [],
+  "announcements": [],
+  "sceneReports": [],
+  "transportLogs": [],
+  "tabs": [
+    {
+      "id": "home",
+      "title": "Home"
+    }
+  ]
+}

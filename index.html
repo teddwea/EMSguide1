@@ -1,0 +1,244 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Paramedic Dashboard</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body class="dark">
+
+  <!-- USER PROMPT (centered on black bg) -->
+  <div id="nameOverlay" class="overlay">
+    <div class="login-card">
+      <h2>Enter your name</h2>
+      <div class="login-row">
+        <input id="enterName" type="text" placeholder="Type your name and press Enter" />
+      </div>
+      <div class="login-actions">
+        <button id="enterNameBtn" class="btn">Enter</button>
+      </div>
+      <div class="login-note" style="margin-top:12px;font-size:13px;color:var(--muted)">This name will be used for chat, announcements, and logs.</div>
+    </div>
+  </div>
+
+  <!-- ADD TAB MODAL -->
+  <div id="addTabModal" class="small-modal" style="display:none;">
+    <div class="small-modal-card">
+      <h3>Create new tab</h3>
+      <div style="margin-top:8px;">
+        <label for="newTabSelect" style="display:block;margin-bottom:6px;color:var(--muted);">Choose a page template</label>
+        <select id="newTabSelect" style="width:100%;padding:8px;border-radius:6px;background:transparent;border:1px solid rgba(255,255,255,0.03);color:var(--text);">
+          <option value="vitals">Vitals</option>
+          <option value="diagnosis">Diagnosis</option>
+          <option value="scene">Scene Reports</option>
+          <option value="transport">Transport Logs</option>
+          <option value="settings">Settings</option>
+          <option value="admin">Admin</option>
+          <option value="custom">Custom (enter title)</option>
+        </select>
+        <input id="newTabCustomTitle" placeholder="Custom tab title" style="margin-top:8px;display:none;padding:8px;border-radius:6px;background:transparent;border:1px solid rgba(255,255,255,0.03);color:var(--text);width:100%;" />
+      </div>
+      <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:12px;">
+        <button id="addTabCancel" class="btn" style="background:transparent;border:1px solid rgba(255,255,255,0.06);color:var(--muted);">Cancel</button>
+        <button id="addTabConfirm" class="btn">Create</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOP BAR -->
+  <div class="topbar">
+    <div class="top-left">
+      <div class="logo"><span class="logo-text">Paramedic</span></div>
+      <nav class="top-tabs" id="topTabs">
+        <!-- dynamic -->
+      </nav>
+      <button id="addTabBtn" class="add-tab">+</button>
+    </div>
+
+    <div class="top-right">
+      <div id="currentUser" class="user" style="display:none;">
+        <div class="user-name" id="userName">You</div>
+        <div class="user-meta" id="userMeta"></div>
+        <div class="avatar" aria-hidden="true"></div>
+        <button id="logoutBtn" class="small-btn">Change</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- LAYOUT -->
+  <div class="layout">
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <ul class="side-list" id="sideList">
+        <li><button class="side-btn active" data-page="home">Home</button></li>
+        <li><button class="side-btn" data-page="vitals">Vitals</button></li>
+        <li><button class="side-btn" data-page="diagnosis">Diagnosis</button></li>
+        <li><button class="side-btn" data-page="scene">Scene Reports</button></li>
+        <li><button class="side-btn" data-page="transport">Transport Logs</button></li>
+        <li><button class="side-btn" data-page="settings">Settings</button></li>
+        <li><button class="side-btn" data-page="admin">Admin</button></li>
+      </ul>
+    </aside>
+
+    <!-- MAIN -->
+    <main class="main" id="mainArea">
+      <!-- HOME -->
+      <section id="home" class="page active home-grid">
+        <div class="panel large chat-panel">
+          <div class="panel-header">Chat</div>
+          <div class="panel-inner chat-inner">
+            <div id="chatList" class="chat-list"></div>
+            <div class="chat-space"></div>
+            <div class="chat-input">
+              <input type="text" placeholder="Write something..." id="chatInput" />
+              <button id="chatSend" title="Send">✈️</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel large announce-panel">
+          <div class="panel-header">Announcements</div>
+          <div class="panel-inner announce-inner">
+            <div id="announceList"></div>
+            <div class="announce-space"></div>
+            <div class="chat-input">
+              <input type="text" placeholder="Write something..." id="announceInput" />
+              <button id="announceSend" title="Send">✈️</button>
+            </div>
+          </div>
+        </div>
+
+        <aside class="right-col">
+          <div class="panel small card top-card" id="scene-card">
+            <div class="panel-header">Scene Reports</div>
+            <div class="panel-inner card-inner">
+              <div class="search-row">
+                <input id="sceneSearch" placeholder="Search" />
+                <button class="search-btn" id="sceneAdd">Add</button>
+              </div>
+              <div id="sceneList" class="scene-list"></div>
+            </div>
+          </div>
+
+          <div class="panel small card bottom-card" id="transport-card">
+            <div class="panel-header">Transport Logs</div>
+            <div class="panel-inner card-inner">
+              <div class="search-row">
+                <input id="transportSearch" placeholder="Search" />
+                <button class="search-btn" id="transportAdd">Add</button>
+              </div>
+              <div id="transportList" class="transport-list"></div>
+            </div>
+          </div>
+        </aside>
+      </section>
+
+      <!-- Vitals -->
+      <section id="vitals" class="page">
+        <div class="panel">
+          <div class="panel-header">Vitals</div>
+          <div class="panel-inner">Blank page for Vitals.</div>
+        </div>
+      </section>
+
+      <!-- Diagnosis -->
+      <section id="diagnosis" class="page">
+        <div class="panel">
+          <div class="panel-header">Diagnosis</div>
+          <div class="panel-inner">Blank page for Diagnosis.</div>
+        </div>
+      </section>
+
+      <!-- Scene Reports page -->
+      <section id="scene" class="page">
+        <div class="panel">
+          <div class="panel-header">Scene Reports</div>
+          <div class="panel-inner" id="scenePageList"></div>
+        </div>
+      </section>
+
+      <!-- Transport Logs page -->
+      <section id="transport" class="page">
+        <div class="panel">
+          <div class="panel-header">Transport Logs</div>
+          <div class="panel-inner" id="transportPageList"></div>
+        </div>
+      </section>
+
+      <!-- Settings -->
+      <section id="settings" class="page">
+        <div class="panel">
+          <div class="panel-header">Settings</div>
+          <div class="panel-inner settings-inner">
+            <div class="setting-row">
+              <div class="setting-label">Chatter</div>
+              <div class="setting-control">
+                <button id="toggleChatter" class="btn">Turn On</button>
+              </div>
+            </div>
+
+            <div class="setting-row">
+              <div class="setting-label">Chatter Volume</div>
+              <div class="setting-control">
+                <input id="chatterVol" type="range" min="0" max="1" step="0.01" value="0.5"/>
+              </div>
+            </div>
+
+            <div class="setting-row">
+              <div class="setting-label">Theme</div>
+              <div class="setting-control">
+                <button id="toggleTheme" class="btn">Toggle Dark/Light</button>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      <!-- Admin page -->
+      <section id="admin" class="page">
+        <div class="panel">
+          <div class="panel-header">Admin</div>
+          <div class="panel-inner">
+            <div id="adminLockedNotice" style="margin-bottom:12px;color:var(--muted)"></div>
+
+            <div id="adminContent" style="display:none;">
+              <h3>Manage Users</h3>
+              <div id="userList"></div>
+
+              <h4 style="margin-top:12px">Add User (username only)</h4>
+              <div class="admin-add">
+                <input id="newUserName" placeholder="username" />
+                <button id="createUserBtn" class="btn">Create</button>
+                <div id="userMsg"></div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- Admin password modal -->
+  <div id="adminPassModal" class="small-modal" style="display:none;">
+    <div class="small-modal-card">
+      <h3>Admin access required</h3>
+      <input id="adminPassInput" type="password" placeholder="Enter admin password" />
+      <div style="display:flex;gap:8px;margin-top:10px;">
+        <button id="adminPassOk" class="btn">OK</button>
+        <button id="adminPassCancel" class="btn" style="background:transparent;border:1px solid rgba(255,255,255,0.06);">Cancel</button>
+      </div>
+      <div id="adminPassMsg" style="margin-top:8px;color:#ff9b9b;"></div>
+    </div>
+  </div>
+
+  <!-- audio (place chatter.mp3 in same folder) -->
+  <audio id="chatter" src="chatter.mp3" loop></audio>
+
+  <script src="script.js"></script>
+</body>
+</html>
